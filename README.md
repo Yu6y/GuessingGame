@@ -4,8 +4,7 @@ Simple CLI game.
 
 ## Usage 
 
-mvn clean compile
-mvn -q exec:java
+mvn -q clean compile exec:java
 
 ### More Info
 

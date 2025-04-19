@@ -16,42 +16,58 @@ public class Game {
     }
 
     public void handleGame(){
+        String continueChoice;
+        long timeStart, timeEnd, timeTotal;
+
         printHello();
 
         do {
-            System.out.print("Enter your choice: ");
-            level = getUserInputNumber();
-        }while(level < 1 || level > 3);
+            printLevels();
+            do {
+                System.out.print("Enter your choice: ");
+                level = getUserInputNumber();
+            } while (level < 1 || level > 3);
 
-        attempts = 10 / level;
-        attemptsLeft = attempts;
-        generateNumber();
+            attempts = 10 / level;
+            attemptsLeft = attempts;
+            generateNumber();
 
-        System.out.println("Game started!");
+            System.out.println("Game started!");
 
-        while(attemptsLeft > 0){
-            System.out.print("Your guess: ");
-            int guess = getUserInputNumber();
+            timeStart = System.currentTimeMillis();
+            while (attemptsLeft > 0) {
+                System.out.print("Your guess: ");
+                int guess = getUserInputNumber();
 
+                attemptsLeft--;
 
-            attemptsLeft--;
-            if(attemptsLeft == 0){
-                System.out.println("You lose! Try again!");
-                break;
+                if (guess == generatedNumber) {
+                    timeEnd = System.currentTimeMillis();
+                    timeTotal = (timeEnd - timeStart) / 1000;
+                    System.out.println("Congratulations! You guessed it in " + (attempts - attemptsLeft) + " attempts in "
+                            + timeTotal + " seconds.");
+                    break;
+                }
+
+                if (attemptsLeft == 0) {
+                    System.out.println("You lose! Try again!");
+                    break;
+                }
+
+                System.out.println("Your guess is incorrect! Try again.");
+                System.out.println(attemptsLeft + " attempts left.");
+                if (guess < generatedNumber)
+                    System.out.println("Try to guess number greater than that ;)");
+                else
+                    System.out.println("Try to guess number less than that ;)");
             }
 
-            if(guess == generatedNumber){
-                System.out.println("Congratulations! You guessed it in " + (attempts - attemptsLeft) + " attempts.");
-                break;
-            }
+            do{
+                System.out.print("It's end of the game. Do you want to play again?[yes/no]: ");
+                continueChoice = scanner.next();
+            }while(!(continueChoice.equals("yes") || continueChoice.equals("no")));
 
-            System.out.println("Your guess is incorrect! Try again.");
-            System.out.println(attemptsLeft + " attempts left.");
-            if(guess < generatedNumber)
-                System.out.println("Try to guess number greater than that ;)");
-            else
-                System.out.println("Try to guess number less than that ;)");
-        }
+        }while(continueChoice.equals("yes"));
     }
 
     private void printHello(){
@@ -59,6 +75,9 @@ public class Game {
                 Welcome to the Number Guessing Game!
                 I'm thinking of a number between 1 and 100.
                 You need to enter a number between 1 and 100.""");
+    }
+
+    private void printLevels(){
         System.out.println("""
                 Select difficulty level:\s
                 1. Easy (10 chances)
@@ -80,5 +99,5 @@ public class Game {
             }
         }
     }
-    //
+
 }
